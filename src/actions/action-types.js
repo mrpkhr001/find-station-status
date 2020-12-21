@@ -1,0 +1,4 @@
+export const SEARCH_RESULT = "SEARCH_RESULT";
+
+export const STATION_SELECT = "STATION_SELECT";
+export const STATION_DETAIL = "STATION_DETAIL";
