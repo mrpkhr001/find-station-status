@@ -53,12 +53,22 @@ export default class AutoCompleteInput extends PureComponent {
         }
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(this.state.focusIndex !== prevState.focusIndex){
+            this.listItems[this.state.focusIndex] && this.listItems[this.state.focusIndex].focus();
+            setTimeout(() => this.inputEl.focus(), 0);
+        }
+
+    }
+
     render() {
         const {searchText, focusIndex, listVisible} = this.state;
         const {matchingList = []} = this.props;
+        this.listItems = [];
         return (
             <InputWrapper>
-                <input type="text"
+                <input ref={el => this.inputEl = el}
+                       type="text"
                        value={searchText}
                        className="autoCompleteInput"
                        name="autoCompleteInput"
@@ -67,12 +77,13 @@ export default class AutoCompleteInput extends PureComponent {
                        onKeyDown={this.onKeyDownHandler}
                 />
                 {matchingList.length > 0 && listVisible &&
-                <AutocompleteListWrapper data-testid="autoCompleteListWrapper">
+                <AutocompleteListWrapper ref={el => this.listEl = el} data-testid="autoCompleteListWrapper">
                     {
                         matchingList.map((item, index) => (
-                            <div
+                            <div ref={el => this.listItems[index] = el}
                                 key={`autoComplete${index}`}
                                 className={`autocompleteItem ${focusIndex === index ? "active" : ""}`}
+                                 tabIndex="0"
                                 onClick={() => this.onItemSelect(item)}
                             >
                                 {item.name}
