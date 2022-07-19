@@ -9,7 +9,8 @@ export const StationDetailWrapper = styled.div`
 export const LiveStationHeader = styled.div`
     padding: 12px 0;
     text-align : center;
-    span{
+    
+    {
         font-size: 18px;
         font-weight: 600; 
     }

@@ -1,5 +1,6 @@
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
+import {debounce} from "lodash"
 import {InputWrapper, AutocompleteListWrapper} from "./station-finder-header.styles";
 
 export default class AutoCompleteInput extends PureComponent {
@@ -11,12 +12,15 @@ export default class AutoCompleteInput extends PureComponent {
             focusIndex: 0,
             searchText: ""
         }
+        this.demandSearch = debounce(() => {
+            this.props.onDemandSearch && this.props.onDemandSearch(this.state.searchText);
+        }, 500);
+
     }
 
     inputHandler = (e) => {
-        this.setState({searchText: e.target.value, listVisible: e.target.value.length > 0, focusIndex: 0}, () => {
-            this.props.onDemandSearch && this.props.onDemandSearch(this.state.searchText);
-        });
+        this.setState({searchText: e.target.value, listVisible: e.target.value.length > 0, focusIndex: 0}, 
+            () => this.demandSearch());
     }
 
     onItemSelect = (station) => {
